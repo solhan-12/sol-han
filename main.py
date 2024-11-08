@@ -1,9 +1,9 @@
-
+# some info taught by chatgtp and w3schools
 import pygame as pg
 from pygame.sprite import Sprite
 import os
 from random import randint
-
+# for 2d vectors in the game
 vec = pg.math.Vector2
 
 # Colors
@@ -20,7 +20,7 @@ PADDLE_SPEED = 2
 PADDLE_WIDTH = 25
 PADDLE_HEIGHT = 90
 
-# Spaceship sprite class
+# Spaceship  class from pygame sprite module (initinitializer)
 class Spaceship(Sprite):
     def __init__(self, width, height, color):
         Sprite.__init__(self)
@@ -29,13 +29,13 @@ class Spaceship(Sprite):
         self.width = width
         self.height = height
 
-        # load the image
+        # load the image (helped by chatgtp)
         self.image = pg.image.load("./spaceship.png").convert_alpha()
 
         # reszie the player image
         self.image = pg.transform.scale(self.image, (self.width, self.height))
 
-        # set the codlor
+        # set the color
         self.color = color
 
         # set the rectangle size
@@ -102,13 +102,13 @@ class Game:
         if self.paddle_pos_y < 0:
             self.paddle_pos_y = 0
 
-        # if the paddle position is below window, bring it back
+        # if the paddle position is below window, bring it back 
         if self.paddle_pos_y > WINDOW_HEIGHT - PADDLE_HEIGHT:
             self.paddle_pos_y = WINDOW_HEIGHT - PADDLE_HEIGHT
-
+# checking if space bar was pessed
         if keys[pg.K_SPACE]:
             self.spacehips.empty()
-        
+        #get folder and file
             for i in range(0,9):
                 s = Spaceship(100,100,(0,255,0))
                 self.spacehips.add(s)
