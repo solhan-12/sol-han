@@ -43,7 +43,45 @@ class Spaceship(Sprite):
         
         # set the center position randomly
         self.rect.center = vec(randint(0, WINDOW_WIDTH), randint(0, WINDOW_HEIGHT))
-         
+
+class paddal:
+    def __init__(self):
+        self.paddle_pos_y = WINDOW_HEIGHT // 2 - PADDLE_HEIGHT // 2 
+            
+    def creating_player2(self):
+        self.paddal_pos_x = 950
+
+    def creating_player1(self): 
+        self.paddal_pos_x = 30
+
+    def draw(self,screen):
+     # draw the paddle 
+        pg.draw.rect(screen, Black, (self.paddal_pos_x, self.paddle_pos_y, PADDLE_WIDTH, PADDLE_HEIGHT))
+
+    def move_up(self):
+        # if Up key is pressed, move the paddle up by decreasing its y position
+        self.paddle_pos_y -= PADDLE_SPEED  
+
+        # if the paddle position is above window, bring it back
+        if self.paddle_pos_y < 0:
+            self.paddle_pos_y = 0
+
+        # if the paddle position is below window, bring it back 
+        if self.paddle_pos_y > WINDOW_HEIGHT - PADDLE_HEIGHT:
+            self.paddle_pos_y = WINDOW_HEIGHT - PADDLE_HEIGHT 
+
+    def move_downward(self):
+        # if Down key is pressed, move the paddle down by increasing its y position
+        self.paddle_pos_y += PADDLE_SPEED  
+
+        # if the paddle position is above window, bring it back
+        if self.paddle_pos_y < 0:
+            self.paddle_pos_y = 0
+
+        # if the paddle position is below window, bring it back 
+        if self.paddle_pos_y > WINDOW_HEIGHT - PADDLE_HEIGHT:
+            self.paddle_pos_y = WINDOW_HEIGHT - PADDLE_HEIGHT
+
 # main game class
 class Game:
     # initionalztion 
@@ -60,8 +98,10 @@ class Game:
         self.clock = pg.time.Clock()
         # printing a screen size just to check
         print(self.screen)
-        # paddle postion in the y direction
-        self.paddle_pos_y = WINDOW_HEIGHT // 2 - 80 // 2 
+        self.paddal_1 = paddal()  
+        self.paddal_2 = paddal()
+        self.paddal_1.creating_player1()
+        self.paddal_2.creating_player2()
         # spacehips
         self.spacehips = pg.sprite.Group()
    
@@ -91,21 +131,19 @@ class Game:
         keys = pg.key.get_pressed()
 
         # if Up key is pressed, move the paddle up by decreasing its y position
+        if keys[pg.K_w]:
+            self.paddal_1.move_up()
+            
         if keys[pg.K_UP]:
-            self.paddle_pos_y -= PADDLE_SPEED  
+            self.paddal_2.move_up() 
 
         # if Down key is pressed, move the paddle down by increasing its y position
         if keys[pg.K_DOWN]:
-            self.paddle_pos_y += PADDLE_SPEED  
-
-        # if the paddle position is above window, bring it back
-        if self.paddle_pos_y < 0:
-            self.paddle_pos_y = 0
-
-        # if the paddle position is below window, bring it back 
-        if self.paddle_pos_y > WINDOW_HEIGHT - PADDLE_HEIGHT:
-            self.paddle_pos_y = WINDOW_HEIGHT - PADDLE_HEIGHT
-# checking if space bar was pessed
+            self.paddal_2.move_downward()
+        
+        if keys[pg.K_s]:
+            self.paddal_1.move_downward()
+        # checking if space bar was pessed
         if keys[pg.K_SPACE]:
             self.spacehips.empty()
         #get folder and file
@@ -120,7 +158,8 @@ class Game:
         self.screen.blit(self.backgroundImage, (0, 0))
         
         # draw the paddle 
-        pg.draw.rect(self.screen, Black, (50, self.paddle_pos_y, PADDLE_WIDTH, PADDLE_HEIGHT))
+        self.paddal_1.draw(self.screen)
+        self.paddal_2.draw(self.screen)
 
         # draw spaceships
         self.spacehips.draw(self.screen)
