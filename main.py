@@ -1,4 +1,5 @@
 # some info taught by chatgtp and w3schools
+#https://chatgpt.com/c/674f7220-86d8-8004-98c2-f3141858437b (help me learn and create a ball for pong in python)
 import pygame as pg
 from pygame.sprite import Sprite
 import os
@@ -166,6 +167,59 @@ class Game:
 
         # draw the screen
         pg.display.flip()
+
+        # Ball class to handle the behavior of the ball in the Pong game
+class Ball(Sprite):
+    def __init__(self, radius, color, speed):
+        # Initialize the Sprite superclass
+        Sprite.__init__(self)
+
+        # Set the radius of the ball
+        self.radius = radius
+
+        # Set the color of the ball
+        self.color = color
+
+        # Create a transparent surface for the ball (allows us to draw the circle)
+        self.image = pg.Surface((radius * 2, radius * 2), pg.SRCALPHA)
+
+        # Draw a circle on the ball's surface
+        pg.draw.circle(self.image, color, (radius, radius), radius)
+
+        # Get the rectangular bounds of the ball's image for positioning
+        self.rect = self.image.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
+
+        # Set the initial velocity as a vector, determining its movement
+        self.velocity = vec(speed, speed)
+
+    # Update method to handle the ball's movement and collisions
+    def update(self, paddal_1, paddal_2):
+        # Move the ball horizontally and vertically according to its velocity
+        self.rect.x += self.velocity.x
+        self.rect.y += self.velocity.y
+
+        # Check if the ball hits the top or bottom of the screen
+        if self.rect.top <= 0 or self.rect.bottom >= WINDOW_HEIGHT:
+            # Reverse the vertical direction (bounce)
+            self.velocity.y *= -1
+
+        # Check if the ball collides with either paddle
+        if self.rect.colliderect(paddal_1.get_rect()) or self.rect.colliderect(paddal_2.get_rect()):
+            # Reverse the horizontal direction (bounce)
+            self.velocity.x *= -1
+
+        # Reset the ball if it goes beyond the left or right edge of the screen
+        if self.rect.left <= 0 or self.rect.right >= WINDOW_WIDTH:
+            self.reset()
+
+    # Reset method to reposition the ball and randomize its velocity
+    def reset(self):
+        # Set the ball back to the center of the screen
+        self.rect.center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2)
+
+        # Assign a random velocity with a new direction after reset
+        self.velocity = vec(randint(-3, 3), randint(-3, 3))
+
 
 
 # created a game object
