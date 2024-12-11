@@ -1,5 +1,5 @@
 # some info taught by chatgtp and w3schools
-#https://chatgpt.com/c/674f7220-86d8-8004-98c2-f3141858437b (help me learn and create a ball for pong in python)
+#to chat gtp:   (help me learn and create a ball for pong in python)
 import pygame as pg
 from pygame.sprite import Sprite
 import os
@@ -17,7 +17,7 @@ WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 700
 
 # Paddle settings
-PADDLE_SPEED = 2
+PADDLE_SPEED = 0.78
 PADDLE_WIDTH = 25
 PADDLE_HEIGHT = 90
 
