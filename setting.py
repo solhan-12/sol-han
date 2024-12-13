@@ -1,0 +1,17 @@
+# Colors
+WHITE = (255,255,255)
+BLUE = (50,50,255)
+Black = (0, 0, 0)
+RED = (255,0,0)
+
+
+# Window size
+WINDOW_WIDTH = 1000
+WINDOW_HEIGHT = 700
+
+
+# Paddle settings
+PADDLE_SPEED = 1.2
+PADDLE_WIDTH = 20
+PADDLE_HEIGHT = 95
+
