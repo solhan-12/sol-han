@@ -1,9 +1,8 @@
-# some info taught by chatgtp and w3schools
-#https://chatgpt.com/c/674f7220-86d8-8004-98c2-f3141858437b (help me learn and create a ball for pong in python)
 import pygame as pg
 from pygame.sprite import Sprite
 import os
 from random import randint
+
 # for 2d vectors in the game
 vec = pg.math.Vector2
 
@@ -20,21 +19,29 @@ class Game:
         # setting a backround image
         self.backgroundImage = pg.image.load("./background.png").convert()
         self.backgroundImage = pg.transform.smoothscale(self.backgroundImage, self.screen.get_size())
+
         # setting a window caption title
         pg.display.set_caption("Sol game")
+
         # setting a clock
         self.clock = pg.time.Clock()
+
         # printing a screen size just to check
         print(self.screen)
-        self.paddal_1 = paddal()  
-        self.paddal_2 = paddal()
-        self.paddal_1.creating_player1()
-        self.paddal_2.creating_player2()
+
+        # paddles for players
+        self.paddle_1 = Paddle(30, WINDOW_HEIGHT // 2 - PADDLE_HEIGHT // 2, PADDLE_WIDTH, PADDLE_HEIGHT)  
+        self.paddle_2 = Paddle(950, WINDOW_HEIGHT // 2 - PADDLE_HEIGHT // 2, PADDLE_WIDTH, PADDLE_HEIGHT)
+
         # spacehips
         self.spacehips = pg.sprite.Group()
 
         # ball
         self.ball = Ball(10, RED, WINDOW_WIDTH, WINDOW_HEIGHT)
+
+        # fonts
+        self.font1 = pg.font.Font(None, 30)
+        self.font2 = pg.font.Font(None, 50)
    
     #run function
     def run(self):
@@ -64,19 +71,23 @@ class Game:
         # key pressed events
         keys = pg.key.get_pressed()
 
+        # esc to quit
+        if keys[pg.K_ESCAPE]:
+            self.running = False
+
         # if Up key is pressed, move the paddle up by decreasing its y position
         if keys[pg.K_w]:
-            self.paddal_1.move_up()
+            self.paddle_1.move_up()
             
         if keys[pg.K_UP]:
-            self.paddal_2.move_up() 
+            self.paddle_2.move_up() 
 
         # if Down key is pressed, move the paddle down by increasing its y position
         if keys[pg.K_DOWN]:
-            self.paddal_2.move_downward()
+            self.paddle_2.move_downward()
         
         if keys[pg.K_s]:
-            self.paddal_1.move_downward()
+            self.paddle_1.move_downward()
         # checking if space bar was pessed
         if keys[pg.K_SPACE]:
             self.spacehips.empty()
@@ -87,7 +98,9 @@ class Game:
 
     # update function
     def update(self):
-        self.ball.update()
+        self.paddle_1.collision(self.ball)
+        self.paddle_2.collision(self.ball)
+        self.ball.update(self.paddle_1, self.paddle_2)
 
     # draw function 
     def draw(self):
@@ -96,14 +109,27 @@ class Game:
         self.screen.blit(self.backgroundImage, (0, 0))
         
         # draw the paddle 
-        self.paddal_1.draw(self.screen)
-        self.paddal_2.draw(self.screen)
+        self.paddle_1.draw(self.screen)
+        self.paddle_2.draw(self.screen)
 
         # draw spaceships
         self.spacehips.draw(self.screen)
 
         # draw the ball
         self.ball.draw(self.screen)
+
+        # draw texts
+        text = self.font1.render('W, S for player 1. Up, down for player 2', 1, Black)
+        text_rect = text.get_rect(center=(WINDOW_WIDTH//2, WINDOW_HEIGHT//2 + WINDOW_HEIGHT//2-50))
+        self.screen.blit(text, text_rect)
+
+        text = self.font2.render('score: ' + str(self.paddle_1.score), 1, Black)
+        text_rect = text.get_rect(center=(WINDOW_WIDTH * 0.2, WINDOW_HEIGHT//2 + WINDOW_HEIGHT//2-50))
+        self.screen.blit(text, text_rect)
+
+        text = self.font2.render('score: ' + str(self.paddle_2.score), 1, Black)
+        text_rect = text.get_rect(center=(WINDOW_WIDTH * 0.8, WINDOW_HEIGHT//2 + WINDOW_HEIGHT//2-50))
+        self.screen.blit(text, text_rect)
 
         # draw the screen
         pg.display.flip()
